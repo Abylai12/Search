@@ -1,4 +1,4 @@
-const UserCard = ({ imgSrc, name, position }) => {
+const UserCard = ({ imgSrc, name, position, handleItem }) => {
   return (
     <div className="flex gap-5 justify-center items-center p-4">
       <div className="border">
@@ -9,6 +9,9 @@ const UserCard = ({ imgSrc, name, position }) => {
       </div>
       <div>
         <span className="text-3xl">{position}</span>
+      </div>
+      <div>
+        <button onClick={handleItem}>clear</button>
       </div>
     </div>
   );

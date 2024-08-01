@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import UserCard from "./userCard";
+import SearchItem from "./searchItem";
+import SearchItems from "./searchItems";
 const cardList = [
   {
     id: 1,
@@ -31,6 +33,17 @@ const cardList = [
     jobTitle: "UX Designer",
     imageUrl: "https://randomuser.me/api/portraits/women/3.jpg",
   },
+
+  {
+    id: 4,
+    firstName: "Bob Brown",
+    age: 35,
+    email: "bob.brown@example.com",
+    address: "101 Maple St, Springfield, IL",
+    phone: "99011093",
+    jobTitle: "Product Owner",
+    imageUrl: "https://randomuser.me/api/portraits/men/4.jpg",
+  },
   {
     id: 5,
     firstName: "Charlie Davis",
@@ -42,23 +55,44 @@ const cardList = [
     imageUrl: "https://randomuser.me/api/portraits/men/5.jpg",
   },
   {
-    id: 4,
-    firstName: "Bob Brown",
-    age: 35,
+    id: 7,
+    firstName: "Mesut Ozil",
+    age: 38,
     email: "bob.brown@example.com",
     address: "101 Maple St, Springfield, IL",
     phone: "99011093",
     jobTitle: "Product Owner",
     imageUrl: "https://randomuser.me/api/portraits/men/4.jpg",
   },
+  {
+    id: 6,
+    firstName: "Cole Palmer",
+    age: 23,
+    email: "charlie.davis@example.com",
+    address: "202 Elm St, Springfield, IL",
+    phone: "99011094",
+    jobTitle: "Marketing Specialist",
+    imageUrl: "https://randomuser.me/api/portraits/men/5.jpg",
+  },
 ];
+
 const SearchBox = () => {
   const [word, setWord] = useState("");
+  const [words, setWords] = useState("");
   const [clear, setClear] = useState(cardList);
 
   const handleChange = (e) => {
     setWord(e.target.value);
+    clear.filter(
+      (user) =>
+        user?.firstName?.toLowerCase().includes(word) ||
+        user?.jobTitle?.toLowerCase().includes(words)
+    );
   };
+  const handleChanges = (e) => {
+    setWords(e.target.value);
+  };
+
   const handleItem = (i) => {
     console.log("clear", i);
     setClear(clear.filter((user) => user.id !== i));
@@ -70,28 +104,38 @@ const SearchBox = () => {
   };
   return (
     <section>
-      <div className="flex flex-col items-center p-16">
-        <label htmlFor="">Search here</label>
-        <input
-          type="text"
-          className="bg-gray-300 p-2 w-60"
-          placeholder="search"
-          onChange={handleChange}
+      <div className="flex">
+        <SearchItem
+          word={word}
+          handleChange={handleChange}
+          handleClear={handleClear}
         />
-        <button onClick={handleClear}>clear</button>
-        <span>searched word:{word}</span>
+        {/* <SearchItems
+          words={words}
+          handleChanges={handleChanges}
+          handleClear={handleClear}
+        /> */}
       </div>
       {clear
-        ?.filter(({ firstName }) => firstName.toLowerCase().includes(word))
-        .map(({ imageUrl, firstName, jobTitle, id }) => (
-          <UserCard
-            key={id}
-            imgSrc={imageUrl}
-            name={firstName}
-            position={jobTitle}
-            handleItem={() => handleItem(id)}
-          />
-        ))}
+        ?.filter(
+          (user) =>
+            user?.firstName?.toLowerCase().includes(word) ||
+            user?.jobTitle?.toLowerCase().includes(words)
+        )
+        .map(
+          ({ imageUrl, firstName, jobTitle, id, age, email, phone }, idx) => (
+            <UserCard
+              key={id}
+              imgSrc={imageUrl}
+              name={firstName}
+              position={jobTitle}
+              age={age}
+              phoneNumber={phone}
+              email={email}
+              handleItem={() => handleItem(id)}
+            />
+          )
+        )}
       {!cardList && <span> empty </span>}
     </section>
   );
